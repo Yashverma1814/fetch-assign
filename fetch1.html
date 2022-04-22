@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #container{
+        display: grid;
+        grid-template-columns: repeat(3,33%);
+        justify-content: center;
+        align-items: center;
+        margin: 100px;
+    }
+    img{
+        width: 200px;
+        height: 250px;
+    }
+</style>
+<body>
+    <center>
+    <input type="text" id="moviename">
+    <button id="btn" onclick="getData()">Search</button>
+    <div id="container"></div>
+    </center>
+</body>
+<script>
+    var d1 = document.getElementById("container");
+    async function getData(){
+        d1.textContent = "";
+        let api_key = "f494d6d2";
+        let movie = document.getElementById("moviename").value;
+        let res = await fetch("https://www.omdbapi.com/?apikey="+api_key+"&s="+movie);
+        let data = await res.json();
+        console.log(data.Search);
+        display(data.Search);
+    }
+    function display(data1){
+        if(data1[0] == "undefined"){
+            var err = document.createElement("img");
+            err.setAttribute("src","https://previews.123rf.com/images/kaymosk/kaymosk1804/kaymosk180400006/100130939-error-404-page-not-found-error-with-glitch-effect-on-screen-vector-illustration-for-your-design-.jpg");
+            d1.append(err);
+        }
+        for(var i=0; i<data1.length; i++){
+            var div1 = document.createElement("div");
+            var img = document.createElement("img");
+            img.setAttribute("src",data1[i].Poster);
+            var h3 = document.createElement("h3");
+            h3.textContent = data1[i].Title;
+            var h4 = document.createElement("h4");
+            h4.textContent = data1[i].Year;
+            div1.append(img,h3,h4);
+            d1.append(div1);
+        }
+    }
+</script>
+</html>
