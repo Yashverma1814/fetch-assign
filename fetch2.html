@@ -24,40 +24,43 @@
     <input type="text" id="moviename">
     <button id="btn" onclick="getData()">Search</button>
     <div id="container"></div>
-    <div id="error"></div>
     </center>
 </body>
 <script>
     var d1 = document.getElementById("container");
-    var d2 = document.getElementById("error");
     async function getData(){
         d1.textContent = "";
-        d2.textContent = "";
         let api_key = "f494d6d2";
         let movie = document.getElementById("moviename").value;
-        let res = await fetch("https://www.omdbapi.com/?apikey="+api_key+"&s="+movie);
+        let res = await fetch("https://www.omdbapi.com/?apikey="+api_key+"&t="+movie);
         let data = await res.json();
         console.log(data);
         display(data);
     }
     function display(data1){
-        if(data1.Response == "False"){
+        if(data1[0] == "undefined"){
             var err = document.createElement("img");
             err.setAttribute("src","https://previews.123rf.com/images/kaymosk/kaymosk1804/kaymosk180400006/100130939-error-404-page-not-found-error-with-glitch-effect-on-screen-vector-illustration-for-your-design-.jpg");
-            d2.append(err);
+            d1.append(err);
         }
-        console.log(data1.Search)
-        for(var i=0; i<data1.Search.length; i++){
+            var h5 = document.createElement("h5");
+            h5.textContent = "Recommended"
             var div1 = document.createElement("div");
             var img = document.createElement("img");
-            img.setAttribute("src",data1.Search[i].Poster);
+            img.setAttribute("src",data1.Poster);
             var h3 = document.createElement("h3");
-            h3.textContent = data1.Search[i].Title;
+            h3.textContent = data1.Title;
             var h4 = document.createElement("h4");
-            h4.textContent = data1.Search[i].Year;
+            h4.textContent = data1.Year;
             div1.append(img,h3,h4);
-            d1.append(div1);
-        }
+            if(data1.imdbRating >= 8.5){
+                div1.append(img,h3,h4,h5);
+                d1.append(div1);
+            }
+            else{
+                div1.append(img,h3,h4);
+                d1.append(div1);
+            }
     }
 </script>
 </html>
